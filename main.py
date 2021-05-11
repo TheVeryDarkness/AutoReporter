@@ -4,6 +4,7 @@ import json
 import requests
 import urllib.parse as parse
 
+CERT = None  # Specify the certificate here if you use a proxy.
 SHARED_HEADER = {"Host": "tjxsfw.chisai.tech",
                  "Connection": "keep-alive",
                  "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36 MicroMessenger/7.0.9.501 NetType/WIFI MiniProgramEnv/Windows WindowsWechat",
@@ -17,7 +18,7 @@ def getReportStatus(authorization: str, studentPid: int):
     header.update(SHARED_HEADER)
     dataDict = {"studentPid": studentPid}
     data = parse.urlencode(dataDict)
-    return requests.get("https://tjxsfw.chisai.tech/api/school_tjxsfw_student/yqfkLogDailyreport/hasDoneToday", headers=header, data=data).content
+    return requests.get("https://tjxsfw.chisai.tech/api/school_tjxsfw_student/yqfkLogDailyreport/hasDoneToday", headers=header, data=data, verify=CERT).content
 
 
 def Report(authorization: str, studentPid: int, studentName: str, studentStudentno: int, studentCollege: str = "土木工程学院", locLat: float = 31.25956, locLng: float = 121.52609, locNation: str = "中国", locProvince: str = "上海市", locCity: str = "上海市", locDistrict: str = "杨浦区", locRiskaddress: str = "不在范围内", locRisklevelGoverment: str = "低风险", studentStatusQuarantine: str = "正常（未隔离）", locStreet: str = "平凉路街道", locStreetno: str = "江浦路"):
@@ -35,8 +36,8 @@ def Report(authorization: str, studentPid: int, studentName: str, studentStudent
     data = parse.urlencode(dataDict).replace("+", "%20")
     header = {"Content-Length": str(len(data)),
               "Authorization": authorization}
-    header = header.update(SHARED_HEADER)
-    return requests.post("https://tjxsfw.chisai.tech/api/school_tjxsfw_student/yqfkLogDailyreport/v3", data=data, headers=header).content
+    header.update(SHARED_HEADER)
+    return requests.post("https://tjxsfw.chisai.tech/api/school_tjxsfw_student/yqfkLogDailyreport/v3", data=data, headers=header, verify=CERT).content
 
 
 def main(auth: str, pid: int, name: str, no: int):
@@ -56,7 +57,7 @@ def main(auth: str, pid: int, name: str, no: int):
     print("Response: ", reportResponse.decode())
 
     report = json.loads(reportResponse)
-    if "code" not in status or report["code"] != 200:
+    if "code" not in report or report["code"] != 200:
         print(fore.RED + "请求失败。" + fore.RESET)
         return -2
     elif report["status"] == False:
