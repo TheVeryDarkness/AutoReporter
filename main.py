@@ -75,7 +75,19 @@ def main(auth: str, pid: int, name: str, no: int):
 
 
 if __name__ == "__main__":
-    if not auth or not pid or not name or not no:
-        print(HELP)
+    from sys import argv
+    from json import load
+    HELP = argv[0] + " configuration"
+    if len(argv) > 1:
+        encoding = argv[2] if len(argv) > 2 else "UTF-8"
+        config = json.load(open(argv[1], "r", encoding=encoding))
+        auth = config["auth"]
+        pid = config["pid"]
+        name = config["name"]
+        no = config["no"]
+        if not auth or not pid or not name or not no:
+            print(HELP)
+        else:
+            main(auth=auth, pid=pid, name=name, no=no)
     else:
-        main(auth=auth, pid=pid, name=name, no=no)
+        print(HELP)
