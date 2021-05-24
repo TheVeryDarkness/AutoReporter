@@ -75,33 +75,6 @@ def main(auth: str, pid: int, name: str, no: int):
 
 
 if __name__ == "__main__":
-    from sys import argv
-    from getopt import getopt, GetoptError
-    HELP = argv[0] + \
-        " -a authorization -p studentPid -N studentName -n studentNo"
-
-    auth: str
-    pid: int
-    name: str
-    no: int
-    try:
-        opts, args = getopt(argv[1:], "ha:p:N:n:")
-    except GetoptError:
-        print(HELP)
-        exit(-1)
-    for opt, arg in opts:
-        if opt in ["-h"]:
-            print(HELP)
-        elif opt in ["-a"]:
-            auth = arg
-        elif opt in ["-p"]:
-            pid = int(arg)
-        elif opt in ["-N"]:
-            name = arg
-        elif opt in ["-n"]:
-            no = int(arg)
-        else:
-            print("Unrecognized option", opt, ".")
     if not auth or not pid or not name or not no:
         print(HELP)
     else:
