@@ -41,30 +41,37 @@ def Report(authorization: str, studentPid: int, studentName: str, studentStudent
 
 
 def main(auth: str, pid: int, name: str, no: int):
+    try:
+        reportStatusResponse = getReportStatus(auth, pid)
+        print("Response: ", reportStatusResponse.decode())
 
-    reportStatusResponse = getReportStatus(auth, pid)
-    print("Response: ", reportStatusResponse.decode())
+        status = json.loads(reportStatusResponse)
+        if "code" not in status or status["code"] != 200:
+            print(fore.RED + "请求失败。" + fore.RESET)
+            return -2
+        elif status["message"] == "今日已打卡":
+            print(fore.BLUE+"已打卡。" + fore.RESET)
+            return 1
 
-    status = json.loads(reportStatusResponse)
-    if "code" not in status or status["code"] != 200:
-        print(fore.RED + "请求失败。" + fore.RESET)
+        try:
+            reportResponse = Report(auth, pid, name, no)
+            print("Response: ", reportResponse.decode())
+
+            report = json.loads(reportResponse)
+            if "code" not in report or report["code"] != 200:
+                print(fore.RED + "请求失败。" + fore.RESET)
+                return -2
+            elif report["status"] == False:
+                print(fore.RED + "打卡失败。" + fore.RESET)
+                return -1
+            print(fore.GREEN+"打卡成功。"+fore.RESET)
+            return 0
+        except requests.exceptions.ConnectionError:
+            print(fore.RED + "连接出错，无法上报" + fore.RESET)
+            return -2
+    except requests.exceptions.ConnectionError:
+        print(fore.RED + "连接出错，无法判断上报状态" + fore.RESET)
         return -2
-    elif status["message"] == "今日已打卡":
-        print(fore.BLUE+"已打卡。" + fore.RESET)
-        return 1
-
-    reportResponse = Report(auth, pid, name, no)
-    print("Response: ", reportResponse.decode())
-
-    report = json.loads(reportResponse)
-    if "code" not in report or report["code"] != 200:
-        print(fore.RED + "请求失败。" + fore.RESET)
-        return -2
-    elif report["status"] == False:
-        print(fore.RED + "打卡失败。" + fore.RESET)
-        return -1
-    print(fore.GREEN+"打卡成功。"+fore.RESET)
-    return 0
 
 
 if __name__ == "__main__":
