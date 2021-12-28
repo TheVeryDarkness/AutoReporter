@@ -9,7 +9,7 @@ SHARED_HEADER = {"Host": "tjxsfw.chisai.tech",
                  "Connection": "keep-alive",
                  "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36 MicroMessenger/7.0.9.501 NetType/WIFI MiniProgramEnv/Windows WindowsWechat",
                  "content-type": "application/x-www-form-urlencoded",
-                 "Referer": "https://servicewechat.com/wx427cf6b5481c866a/67/page-frame.html",
+                 "Referer": "https://servicewechat.com/wx427cf6b5481c866a/81/page-frame.html",
                  "Accept-Encoding": "gzip, deflate, br"}
 
 
@@ -37,7 +37,7 @@ def Report(authorization: str, studentPid: int, studentName: str, studentStudent
     header = {"Content-Length": str(len(data)),
               "Authorization": authorization}
     header.update(SHARED_HEADER)
-    return requests.post("https://tjxsfw.chisai.tech/api/school_tjxsfw_student/yqfkLogDailyreport/v3", data=data, headers=header, verify=CERT).content
+    return requests.post("https://tjxsfw.chisai.tech/api/school_tjxsfw_student/yqfkLogDailyreport/v4", data=data, headers=header, verify=CERT).content
 
 
 def main(auth: str, pid: int, name: str, no: int):
