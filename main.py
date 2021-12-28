@@ -31,7 +31,7 @@ def Report(authorization: str, studentPid: int, studentName: str, studentStudent
                 "source": "weixin,windows", "reportDatetime": currentTimeStr, "hasMoved": "false", "leaveReason": "",
                 "locNation1": locNation, "locProvince1": locProvince,  "locCity1": locCity,
                 "locRiskaddress": locRiskaddress, "locRisklevelGoverment": locRisklevelGoverment,
-                "studentStatusQuarantine": studentStatusQuarantine,
+                "studentStatusQuarantine": studentStatusQuarantine, "sign": "@ZERO",
                 "locStreet": locStreet, "locStreetno": locStreetno}
     data = parse.urlencode(dataDict).replace("+", "%20")
     header = {"Content-Length": str(len(data)),
